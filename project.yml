@@ -1,0 +1,25 @@
+name: RocketBall
+options:
+  bundleIdPrefix: com.rocketball
+  deploymentTarget:
+    iOS: "15.0"
+targets:
+  RocketBall:
+    type: application
+    platform: iOS
+    sources:
+      - path: RocketBall
+        excludes: ["www", "www/**"]
+      - path: RocketBall/www
+        type: folder
+        buildPhase: resources
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.rocketball.game
+        PRODUCT_NAME: Rocket Ball
+        MARKETING_VERSION: "1.0"
+        CURRENT_PROJECT_VERSION: "1"
+        TARGETED_DEVICE_FAMILY: "1,2"
+        GENERATE_INFOPLIST_FILE: NO
+        INFOPLIST_FILE: RocketBall/Info.plist
+        SWIFT_VERSION: "5.0"
