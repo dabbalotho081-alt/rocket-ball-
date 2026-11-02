@@ -1,4 +1,3 @@
-<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
 <!DOCTYPE html>
 <html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
@@ -191,7 +190,7 @@ body{font-family:var(--ui)}
 <div class="b" id="B">BOOST</div><div class="b" id="J">JUMP</div>
 <div id="tools"><div id="mx">☰ Menu</div><div id="rb">↺ Ball</div></div><div id="cams"><div data-m="0">Ball</div><div data-m="1">Chase</div><div data-m="2" class="on">Drone</div></div>
 <div id="ov"><h1 id="t">Rocket Ball 3D</h1><p id="d">Push the joystick to drive. Score in the orange goal at the far end. Tap JUMP twice quickly to flip toward the stick, or jump and tap again later for a double jump (one air move per jump), hold BOOST to speed up, and grab the glowing pads for more boost. Tied games go to overtime: next goal wins.</p><div class="lb">Car</div><div class="row" data-k="car"><div class="o" data-v="sport">🏎️ Sports</div><div class="o on" data-v="normal">🚗 Normal</div><div class="o" data-v="van">🚐 Van</div></div><div class="lb">Map</div><div class="row" data-k="map"><div class="o on" data-v="grass">🌱 Grass</div><div class="o" data-v="ice">🧊 Ice</div><div class="o" data-v="sand">🏜️ Sand</div></div><div class="lb">Match time</div><div class="row" data-k="len"><div class="o" data-v="60">1 min</div><div class="o on" data-v="120">2 min</div><div class="o" data-v="300">5 min</div></div><div class="lb">Mode</div><div class="row" data-k="mode"><div class="o on" data-v="match">⚽ Match</div><div class="o" data-v="free">🎯 Freeplay</div></div><div class="lb">Graphics</div><div class="row" data-k="gfx"><div class="o on" data-v="low">Low</div><div class="o" data-v="normal">Normal</div><div class="o" data-v="high">High</div></div><button id="go">Play</button></div>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="three.min.js"></script>
 <script>
 const $=id=>document.getElementById(id);
 var OPTON=0,CSP=1;let L=30,WD=20,GW=6;const GHT=6;let BR=1.6,GR=30,BG=22,BE=.7;
@@ -1084,5 +1083,3 @@ function loop(t){
  if(UFX.on)try{UFX.update(dt,t)}catch(e){console.warn('ultra fx off',e);UFX.on=false;UFX.g.visible=false}ren.render(scene,cam);requestAnimationFrame(loop)}
 requestAnimationFrame(loop);
 </script></body></html>
-
-</body></html>
