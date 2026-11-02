@@ -3,7 +3,7 @@
 The Rocket Ball 3D HTML game packaged as a native iOS app (WKWebView wrapper).
 
 ## Get the IPA
-- **`ipa/RocketBall.ipa`** in this repo (committed automatically after each build), or
+- the **`release` branch** — it holds only `RocketBall.ipa`, updated after every build on `main`, or
 - the **Releases** page (`build-N` tags), or
 - **Actions → Build IPA → latest run → Artifacts**.
 
@@ -19,7 +19,7 @@ which signs it with your Apple ID.
 | `RocketBall/Info.plist` | App metadata |
 | `RocketBall/Assets.xcassets` | App icon |
 | `project.yml` | XcodeGen project spec |
-| `.github/workflows/build-ipa.yml` | macOS build → IPA → release + commit |
+| `.github/workflows/build-ipa.yml` | macOS build → IPA → GitHub Release + `release` branch |
 
 ## Rebuild
 Push any change, or run **Actions → Build IPA → Run workflow**.
