@@ -2,8 +2,8 @@ name: Build IPA
 
 on:
   push:
+    branches: [main]
     paths-ignore:
-      - "ipa/**"
       - "README.md"
   workflow_dispatch:
 
@@ -56,13 +56,31 @@ jobs:
           body: Unsigned IPA built from ${{ github.sha }}. Sideload with AltStore, Sideloadly, TrollStore or similar.
           files: RocketBall.ipa
 
-      - name: Commit IPA into repo (ipa/ folder)
+      - name: Push IPA to the release branch
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
-          mkdir -p ipa
-          cp RocketBall.ipa ipa/RocketBall.ipa
+          REL="$RUNNER_TEMP/release"
+          URL="https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
+          if git ls-remote --exit-code --heads origin release >/dev/null 2>&1; then
+            git clone --depth 1 --branch release "$URL" "$REL"
+          else
+            mkdir -p "$REL"
+            git -C "$REL" init -b release
+            git -C "$REL" remote add origin "$URL"
+          fi
+          cp RocketBall.ipa "$REL/RocketBall.ipa"
+          cat > "$REL/README.md" <<EOT
+          # Rocket Ball 3D — IPA
+
+          Latest build: **RocketBall.ipa** (build ${{ github.run_number }}, from commit ${{ github.sha }}).
+
+          This branch only holds the built app. Source code lives on \`main\`.
+          The IPA is unsigned — install it with AltStore, Sideloadly or TrollStore.
+          EOT
+          cd "$REL"
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add ipa/RocketBall.ipa
-          git commit -m "Add built RocketBall.ipa (build ${{ github.run_number }}) [skip ci]" || exit 0
-          git pull --rebase origin "${GITHUB_REF_NAME}"
-          git push origin "HEAD:${GITHUB_REF_NAME}"
+          git add -A
+          git commit -m "RocketBall.ipa build ${{ github.run_number }}" || exit 0
+          git push origin release
