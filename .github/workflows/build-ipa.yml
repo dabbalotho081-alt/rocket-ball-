@@ -35,6 +35,9 @@ jobs:
             build | tail -n 40
           test -d build/Build/Products/Release-iphoneos/RocketBall.app
 
+      - name: Read app version
+        run: echo "APP_VERSION=$(grep MARKETING_VERSION project.yml | sed -E 's/.*"(.*)".*/\1/')" >> "$GITHUB_ENV"
+
       - name: Package IPA
         run: |
           rm -rf Payload && mkdir Payload
@@ -51,8 +54,8 @@ jobs:
       - name: Publish GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: build-${{ github.run_number }}
-          name: Rocket Ball build ${{ github.run_number }}
+          tag_name: v${{ env.APP_VERSION }}-build-${{ github.run_number }}
+          name: Rocket Ball v${{ env.APP_VERSION }} (build ${{ github.run_number }})
           body: Unsigned IPA built from ${{ github.sha }}. Sideload with AltStore, Sideloadly, TrollStore or similar.
           files: RocketBall.ipa
 
@@ -73,7 +76,7 @@ jobs:
           cat > "$REL/README.md" <<EOT
           # Rocket Ball 3D — IPA
 
-          Latest build: **RocketBall.ipa** (build ${{ github.run_number }}, from commit ${{ github.sha }}).
+          Latest build: **RocketBall.ipa** — version **${{ env.APP_VERSION }}** (build ${{ github.run_number }}, from commit ${{ github.sha }}).
 
           This branch only holds the built app. Source code lives on \`main\`.
           The IPA is unsigned — install it with AltStore, Sideloadly or TrollStore.
@@ -82,5 +85,5 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add -A
-          git commit -m "RocketBall.ipa build ${{ github.run_number }}" || exit 0
+          git commit -m "RocketBall.ipa v${{ env.APP_VERSION }} build ${{ github.run_number }}" || exit 0
           git push origin release
