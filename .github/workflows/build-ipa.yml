@@ -1,0 +1,68 @@
+name: Build IPA
+
+on:
+  push:
+    paths-ignore:
+      - "ipa/**"
+      - "README.md"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: build-ipa-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install XcodeGen
+        run: brew install xcodegen
+
+      - name: Generate Xcode project
+        run: xcodegen generate
+
+      - name: Build app (unsigned)
+        run: |
+          xcodebuild -project RocketBall.xcodeproj -scheme RocketBall \
+            -configuration Release -sdk iphoneos -destination 'generic/platform=iOS' \
+            -derivedDataPath build \
+            CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO CODE_SIGN_IDENTITY="" \
+            build | tail -n 40
+          test -d build/Build/Products/Release-iphoneos/RocketBall.app
+
+      - name: Package IPA
+        run: |
+          rm -rf Payload && mkdir Payload
+          cp -R build/Build/Products/Release-iphoneos/RocketBall.app Payload/
+          zip -qry RocketBall.ipa Payload
+          ls -lh RocketBall.ipa
+
+      - name: Upload IPA as workflow artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: RocketBall-ipa
+          path: RocketBall.ipa
+
+      - name: Publish GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: build-${{ github.run_number }}
+          name: Rocket Ball build ${{ github.run_number }}
+          body: Unsigned IPA built from ${{ github.sha }}. Sideload with AltStore, Sideloadly, TrollStore or similar.
+          files: RocketBall.ipa
+
+      - name: Commit IPA into repo (ipa/ folder)
+        run: |
+          mkdir -p ipa
+          cp RocketBall.ipa ipa/RocketBall.ipa
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add ipa/RocketBall.ipa
+          git commit -m "Add built RocketBall.ipa (build ${{ github.run_number }}) [skip ci]" || exit 0
+          git pull --rebase origin "${GITHUB_REF_NAME}"
+          git push origin "HEAD:${GITHUB_REF_NAME}"

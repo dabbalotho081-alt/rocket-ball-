@@ -1,19 +1,25 @@
-# Rocket Ball – iOS app
+# Rocket Ball 3D — iOS
 
-Wraps the Rocket Ball 3D HTML game in a native iOS app (full screen, landscape, touch controls).
+The Rocket Ball 3D HTML game packaged as a native iOS app (WKWebView wrapper).
 
-## Get the .ipa without a Mac (free, via GitHub)
-1. Create a new GitHub repository and upload everything in this folder (including the hidden `.github` folder).
-2. Open the repo's **Actions** tab. The "Build IPA" workflow runs automatically (or press **Run workflow**).
-3. When it finishes (~5 min), open the run and download **RocketBall-ipa** → unzip → `RocketBall-unsigned.ipa`.
-4. Install it on your iPhone with **Sideloadly** or **AltStore** (Windows/Mac). They sign it with your Apple ID.
-   With a free Apple ID the app must be re-signed every 7 days.
+## Get the IPA
+- **`ipa/RocketBall.ipa`** in this repo (committed automatically after each build), or
+- the **Releases** page (`build-N` tags), or
+- **Actions → Build IPA → latest run → Artifacts**.
 
-## Build on a Mac with Xcode
-    brew install xcodegen
-    xcodegen generate
-    open RocketBall.xcodeproj
-Pick your Team under Signing & Capabilities, plug in your iPhone, press Run.
+The IPA is **unsigned**. Install it with a sideloading tool (AltStore, Sideloadly, TrollStore, etc.),
+which signs it with your Apple ID.
 
-## Updating the game
-Replace `RocketBall/www/index.html` with the new HTML and rebuild.
+## Layout
+| Path | What |
+|---|---|
+| `RocketBall/www/index.html` | The game |
+| `RocketBall/www/three.min.js` | three.js r128, bundled so the game runs offline |
+| `RocketBall/AppDelegate.swift` | App + full-screen WKWebView |
+| `RocketBall/Info.plist` | App metadata |
+| `RocketBall/Assets.xcassets` | App icon |
+| `project.yml` | XcodeGen project spec |
+| `.github/workflows/build-ipa.yml` | macOS build → IPA → release + commit |
+
+## Rebuild
+Push any change, or run **Actions → Build IPA → Run workflow**.

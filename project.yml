@@ -9,17 +9,23 @@ targets:
     platform: iOS
     sources:
       - path: RocketBall
-        excludes: ["www", "www/**"]
+        excludes:
+          - "www/**"
+          - "Info.plist"
       - path: RocketBall/www
         type: folder
         buildPhase: resources
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.rocketball.game
-        PRODUCT_NAME: Rocket Ball
+        PRODUCT_NAME: RocketBall
         MARKETING_VERSION: "1.0"
         CURRENT_PROJECT_VERSION: "1"
         TARGETED_DEVICE_FAMILY: "1,2"
         GENERATE_INFOPLIST_FILE: NO
         INFOPLIST_FILE: RocketBall/Info.plist
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
         SWIFT_VERSION: "5.0"
+        CODE_SIGNING_ALLOWED: NO
+        CODE_SIGNING_REQUIRED: NO
+        CODE_SIGN_IDENTITY: ""
